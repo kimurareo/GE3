@@ -110,9 +110,6 @@ struct ModelData {
 	MaterialData material;
  };
 
-
-
-
 //------------------------------------------------
 
 // 単位行列
