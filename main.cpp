@@ -13,12 +13,17 @@
 #include "externals/DirectXTex//DirectXTex.h"
 #include <fstream>
 #include <sstream>
+#include "Input.h"
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wPAram, LPARAM lParam);
 
 #pragma comment (lib,"d3d12.lib")
 #pragma comment (lib,"dxgi.lib")
 #pragma comment (lib,"dxguid.lib")
 #pragma comment (lib,"dxcompiler.lib")
+#pragma comment (lib,"dinput8.lib")
+#pragma comment(lib,"dxguid.lib")
 
 //=====================================================================
 // Log
@@ -691,8 +696,6 @@ ModelData LoadObjFile(const std::string& directorPath, const std::string& filena
 
 }
 
-
-
 // Windowsアプリでのエントリーポイント(main関数)
 int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -763,6 +766,31 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Log(ConvertString(std::format(L"WSTRING{}\n", L"abc")));
 
 	//===================================================================================================================
+
+	////// DirectInputの初期化
+	//IDirectInput8* directInput = nullptr;
+	//HRESULT result = DirectInput8Create(wc.hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
+	//assert(SUCCEEDED(result));
+
+	////// キーボードデバイスの生成
+	//IDirectInputDevice8* keyboard = nullptr;
+	//result = directInput->CreateDevice(GUID_SysKeyboard, &keyboard, NULL);
+	//assert(SUCCEEDED(result));
+
+	////// 入力データ形式のセット
+	//result = keyboard->SetDataFormat(&c_dfDIKeyboard);
+	//assert(SUCCEEDED(result));
+
+	////// 排他制御レベルのセット
+	//result = keyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	//assert(SUCCEEDED(result));
+
+	// ポインタ
+	Input* input = nullptr;
+
+	// 入力の初期化
+	input = new Input();
+	input->Initialize(wc.hInstance,hwnd);
 
 	// DXGIファクトリーの生成
 	IDXGIFactory7* dxgiFactory = nullptr;
@@ -1178,7 +1206,7 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 頂点リソースにデータを書き込む
 	VertexData* vertexData = nullptr;
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-	std::memcpy(vertexData, modelData.vertices.data(), sizeof(VertexData)* modelData.vertices.size());
+	std::memcpy(vertexData, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
 
 
 	// ビューポート
@@ -1215,7 +1243,7 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 				//*wvpData = worldMatrix;
 
-	
+
 
 	// ImGuiの初期化
 	IMGUI_CHECKVERSION();
@@ -1292,7 +1320,7 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	vertexDataSprite[3].position = { 640.0f,0.0f,0.0f,1.0f };
 	vertexDataSprite[3].texcoord = { 1.0f,0.0f };
-	
+
 	// Sprite用のTransformationMatrix用のリソースを作る
 	ID3D12Resource* transformationMatrixResourceSprite = CreateBufferResource(device, sizeof(Matrix4x4));
 	// データを書き込む
@@ -1321,6 +1349,7 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	indexDataSprite[0] = 0;  indexDataSprite[1] = 1;  indexDataSprite[2] = 2;
 	indexDataSprite[3] = 1;  indexDataSprite[4] = 3;  indexDataSprite[5] = 2;
 
+
 	MSG msg{};
 
 	// ウィンドウのxボタンが押されるまでループ
@@ -1332,8 +1361,24 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 
+			
+
 		} else {
 			// ゲームの処理
+			
+			//// キーボードの情報の取得開始
+			//keyboard->Acquire();
+
+			//// 全キーの入力状態を取得する
+			//BYTE key[256] = {};
+			//keyboard->GetDeviceState(sizeof(key), key);
+
+			input->Updata();
+
+			//// 数字の0キーが押されていたら
+			//if (key[ DIK_0 ]) {
+			//	OutputDebugStringA("Hit 0\n");
+			//}
 
 			// Sprite用のWorldViewProdectionMatrixを作る
 			Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
@@ -1546,5 +1591,6 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// COMの終了処理
 	CoUninitialize();
 
+	delete input;
 	return 0;
 }
