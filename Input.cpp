@@ -1,18 +1,23 @@
 #include "Input.h"
 #include <cassert>
+#include "WinApp.h"
+
 
 #pragma comment (lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
 
 
-void Input::Initialize(HINSTANCE hinstance, HWND hwnd)
+void Input::Initialize(WinApp* winApp)
 {
 
 	HRESULT result;
 
+	// 借りてきたwinAppのインスタンスを記録
+	this->winApp = winApp;
+
 	// DirectInputの初期化
 	//IDirectInput8* directInput = nullptr;
-    result = DirectInput8Create(hinstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
+    result = DirectInput8Create(winApp->GetInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
 	assert(SUCCEEDED(result));
 
 	// キーボードデバイスの生成
@@ -25,7 +30,7 @@ void Input::Initialize(HINSTANCE hinstance, HWND hwnd)
 	assert(SUCCEEDED(result));
 
 	// 排他制御レベルのセット
-	result = keyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	result = keyboard->SetCooperativeLevel(winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
 
 }

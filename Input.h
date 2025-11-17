@@ -5,6 +5,8 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
+class WinApp;
+
 class Input {
 public:
 	// namespace省略
@@ -12,7 +14,7 @@ public:
 
 public:
 
-	void Initialize(HINSTANCE hinstance,HWND hwnd);
+	void Initialize(WinApp* winApp);
 
 	void Updata();
 
@@ -30,5 +32,8 @@ private:
 	// 全キーの状態
 	BYTE key[256] = {};
 	BYTE preKey[256] = {};
+
+	// WindowsAPI
+	WinApp* winApp = nullptr;
 
 };
