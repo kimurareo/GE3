@@ -1368,8 +1368,6 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			break;
 
-			
-
 		}  
 			// ゲームの処理
 
