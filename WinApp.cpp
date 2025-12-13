@@ -62,20 +62,20 @@ void WinApp::Initialize()
 		wc.hInstance,
 		nullptr);
 
-#ifdef _DEBUG
-
-	ID3D12Debug1* debugController = nullptr;
-
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
-		// デバッグレイヤーを有効化する
-		debugController->EnableDebugLayer();
-		// さらにGPU側でもチェックを行えるようにする
-		debugController->SetEnableGPUBasedValidation(TRUE);
-
-	}
-
-
-#endif 
+//#ifdef _DEBUG
+//
+//	ID3D12Debug1* debugController = nullptr;
+//
+//	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+//		// デバッグレイヤーを有効化する
+//		debugController->EnableDebugLayer();
+//		// さらにGPU側でもチェックを行えるようにする
+//		debugController->SetEnableGPUBasedValidation(TRUE);
+//
+//	}
+//
+//
+//#endif 
 
 
 	// ウィンドウを表示する

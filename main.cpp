@@ -751,20 +751,20 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 //		wc.hInstance,
 //		nullptr);
 //
-//#ifdef _DEBUG
-//
-//	ID3D12Debug1* debugController = nullptr;
-//
-//	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
-//		// デバッグレイヤーを有効化する
-//		debugController->EnableDebugLayer();
-//		// さらにGPU側でもチェックを行えるようにする
-//		debugController->SetEnableGPUBasedValidation(TRUE);
-//
-//	}
-//
-//
-//#endif 
+#ifdef _DEBUG
+
+	ID3D12Debug1* debugController = nullptr;
+
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+		// デバッグレイヤーを有効化する
+		debugController->EnableDebugLayer();
+		// さらにGPU側でもチェックを行えるようにする
+		debugController->SetEnableGPUBasedValidation(TRUE);
+
+	}
+
+
+#endif 
 //
 //
 //	// ウィンドウを表示する
@@ -1368,8 +1368,6 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			break;
 
-			
-
 		}  
 			// ゲームの処理
 
@@ -1551,7 +1549,7 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #ifdef _DEBUG
 	debugController->Release();
 #endif
-	CloseWindow(winApp->GetHwnd());
+	//CloseWindow(winApp->GetHwnd());
 	vertexResource->Release();
 	graphicsPipelineState->Release();
 	signatureBlob->Release();
@@ -1582,7 +1580,7 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 
 	// COMの終了処理
-	CoUninitialize();
+	//CoUninitialize();
 
 	// WindowAPIの終了処理
 	winApp->Finalize();
