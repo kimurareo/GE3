@@ -751,6 +751,7 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 //		wc.hInstance,
 //		nullptr);
 //
+
 #ifdef _DEBUG
 
 	ID3D12Debug1* debugController = nullptr;
