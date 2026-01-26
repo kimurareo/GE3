@@ -1,39 +1,36 @@
 #pragma once
-#include "Windows.h"
-#include <cstdint>
+#include"Windows.h"
+#include"cstdint"
 
+//WindowsAPI
+class WinApp
+{
+public:
 
-class WinApp {
+	void Initialize();
+	void Update();
+	void Finalize();
 
-public: // 静的メンバ関数
-	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+	static LRESULT CALLBACK WindowProc
+	(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+
+	//クライアント領域のサイズ
 	static const int32_t kClientWidth = 1280;
 	static const int32_t kClientHeight = 720;
 
-public: // メンバ関数
-	// 初期化
-	void Initialize();
 
-	// 更新
-	void update();
 
-	//終了
-	void Finalize();
+	HINSTANCE GetHInstance()const { return wc.hInstance; }
+	HWND GetHwnd()const { return hwnd; }
 
-	// getter
-	HWND GetHwnd() const { return hwnd; }
-	HINSTANCE GetInstance() const { return wc.hInstance; }
 
-	// メッセージの処理
-	bool ProcessMessage();
-
+	//メッセージの処理
+	bool ProceccMassage();
 
 private:
-	// ウィンドウハンドル
+	//ウインドウハンドル
 	HWND hwnd = nullptr;
 
+	//ウインドウクラスの設定
 	WNDCLASS wc{};
-
-	
-
 };
