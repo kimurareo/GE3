@@ -187,4 +187,5 @@ private:
 	//メンバ関数
 	//記録時間
 	std::chrono::steady_clock::time_point reference_;
+
 };
